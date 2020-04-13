@@ -12,17 +12,19 @@ public class Player implements java.io.Serializable{
 	private int garbage = 0;	//쓰레기
 	private int sp = 10;		//공격력
 	private int satiety = 100;	//포만감
+	private boolean dead = true;
 
 	public Player() {}
 
 	public Player(String userId, String userPwd, String userName, 
-			String phoneNumber, String email) {
+			String phoneNumber, String email, boolean dead) {
 		super();
 		this.userId = userId;
 		this.userPwd = userPwd;
 		this.userName = userName;
 		this.phoneNumber = phoneNumber;
 		this.email = email;
+		this.dead = dead;
 	}
 
 	public static long getSerialversionuid() {
@@ -63,6 +65,16 @@ public class Player implements java.io.Serializable{
 
 	public int getSatiety() {
 		return satiety;
+	}
+	
+	
+
+	public boolean isDead() {
+		return dead;
+	}
+
+	public void setDead(boolean dead) {
+		this.dead = dead;
 	}
 
 	public void setUserId(String userId) {
