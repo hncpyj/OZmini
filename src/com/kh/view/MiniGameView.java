@@ -186,7 +186,6 @@ public class MiniGameView extends JPanel{
 	}
 
 
-
 	class Key implements KeyListener{
 		
 		@Override
