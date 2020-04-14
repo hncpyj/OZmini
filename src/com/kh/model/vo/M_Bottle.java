@@ -7,6 +7,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class M_Bottle extends M_Garbage{
+	private int x;
+	private int y;
 	
 	Image image;
 	JLabel label;
@@ -18,7 +20,7 @@ public class M_Bottle extends M_Garbage{
 		
 		label = new JLabel(new ImageIcon(image));
 		if(random1 == 1) {
-			label.setBounds(x,y,40,40);
+			label.setBounds(x,y,40,40);//x, y 는 나중에 위치 값 넣을꺼
 		}
 		
 	}
@@ -37,6 +39,22 @@ public class M_Bottle extends M_Garbage{
 
 	public void setLabel(JLabel label) {
 		this.label = label;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	public void setY(int y) {
+		this.y = y;
 	}
 
 }
