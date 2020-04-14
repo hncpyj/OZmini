@@ -17,6 +17,24 @@ public class MiniGameView extends JPanel{
 	private MainView mf;
 	private MiniGameView miniGameView;
 	
+	private boolean hit() {
+		int x1 = penz_p.getX();
+		int y1 = penz_p.getY();
+		int xm1 = monster_p1.getX();
+		int xm2 = monster_p2.getX();
+		int xm3 = monster_p3.getX();
+		
+		if(((((x1-25) <= xm1) && ((x1+75) >= xm1)) && (y1 == 370)) 
+				|| ((((x1-25) <= xm2) && ((x1+75) >= xm2) && (y1 == 220)) 
+				|| ((((x1-25) <= xm3) && ((x1+75) >= xm3)) && (y1 == 70)))){
+			return true;
+		} else {
+			return false;
+		}    
+
+
+	}
+
 	
 //	M_Garbage g = new M_Bottle();
 	Player p;
@@ -35,16 +53,21 @@ public class MiniGameView extends JPanel{
 	
 	Image background;
 	Image ladder = new ImageIcon("src/image/minigame/사다리.png").getImage().getScaledInstance(70, 160, 0);
+	Image obst = new ImageIcon("src/image/minigame/broken-bottle.png").getImage().getScaledInstance(30, 30, 0);
 	Image penz = new ImageIcon("src/image/minigame/penz_up.png").getImage().getScaledInstance(100, 130, 0);
 	Image monster1 = new ImageIcon("src/image/minigame/angryshark.png").getImage().getScaledInstance(50, 60, 0);
 	Image monster2= new ImageIcon("src/image/minigame/angryshark.png").getImage().getScaledInstance(50, 60, 0);
 	Image monster3 = new ImageIcon("src/image/minigame/angryshark.png").getImage().getScaledInstance(50, 60, 0);
+	
 	
 	boolean keyUp = false;
 	boolean keyDown = false;
 	boolean keyLeft = false;
 	boolean keyRight = false; 
 	boolean playerMove = false;
+	
+
+	int direction;
 	
 	public MiniGameView(MainView mf, Player p) {
 		
@@ -83,6 +106,20 @@ public class MiniGameView extends JPanel{
 		penz_l.setSize(80, 130);
 		penz_l.setLocation(0, 0);
 		
+		//방해물
+		JLabel obst1_1 = new JLabel(new ImageIcon(obst));
+		obst1_1.setBounds(250, 590, 30, 30);
+		JLabel obst1_2 = new JLabel(new ImageIcon(obst));
+		obst1_2.setBounds(150, 590, 30, 30);
+		JLabel obst2_2 = new JLabel(new ImageIcon(obst));
+		obst2_2.setBounds(50, 440, 30, 30);
+		JLabel obst3_1 = new JLabel(new ImageIcon(obst));
+		obst3_1.setBounds(240, 290, 30, 30);
+		JLabel obst3_2 = new JLabel(new ImageIcon(obst));
+		obst3_2.setBounds(160, 290, 30, 30);
+		JLabel obst4_2 = new JLabel(new ImageIcon(obst));
+		obst4_2.setBounds(30, 140, 30, 30);
+		
 		//사다리
 		JLabel ladder1_1 = new JLabel(new ImageIcon(ladder));
 		ladder1_1.setBounds(50, 460, 90, 160);
@@ -96,6 +133,7 @@ public class MiniGameView extends JPanel{
 		ladder3_1.setBounds(20, 160, 90, 160);
 		JLabel ladder3_2 = new JLabel(new ImageIcon(ladder));
 		ladder3_2.setBounds(170, 160, 90, 160);
+		
 		
 		
 		//패널
@@ -120,17 +158,24 @@ public class MiniGameView extends JPanel{
 		this.add(monster_p2);
 		this.add(monster_p3);
 		
+		this.add(obst1_1);
+		this.add(obst1_2);
+		this.add(obst2_2);
+		this.add(obst3_1);
+		this.add(obst3_2);
+		this.add(obst4_2);
+		
 		this.add(ladder1_1);
 		this.add(ladder1_2);
 		this.add(ladder2_1);
 		this.add(ladder2_2);
 		this.add(ladder3_1);
 		this.add(ladder3_2);
+		
 		this.add(label);
 //		if((penz_l.getX() == ((M_Bottle)g).getLabel().getX()+10) || (penz_l.getX() == ((M_Bottle)g).getLabel().getX()-10)) {
 //            ((M_Bottle)g).getLabel().setVisible(false);
 //        }
-		
 		
 		
 		mf.addKeyListener(new Key());
@@ -139,7 +184,6 @@ public class MiniGameView extends JPanel{
 		mf.add(this);
 		mf.repaint();
 	}
-
 
 
 	class Key implements KeyListener{
@@ -161,25 +205,30 @@ public class MiniGameView extends JPanel{
 			
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_UP:
-				
+				keyUp = true;
+				direction = 0;
 				System.out.println("up");
-				if(((x == 50 || x == 60 || x == 280 || x == 290 ) && (y <= 520 && y >= 380))
-						|| ((x == -10 || x == 0 || x == 250 || x == 260 ) && (y <= 370 && y >= 230))
-						|| ((x == 20 || x == 30 || x == 170 || x == 180 ) && (y <= 220 && y >= 80))) {
+				if((((x >= 50 && x <= 60) || (x >= 280 && x <= 290 )) && (y <= 520 && y >= 380))
+						|| (((x >= -10 && x <= 0) || (x >= 250 && x <= 260 )) && (y <= 370 && y >= 230))
+						|| (((x >= 20 && x <= 30) || (x >= 170 && x <= 180 )) && (y <= 220 && y >= 80))) {
 					penz_p.setLocation(x, y-10);
 					System.out.println(penz_p.getLocation());
 				}
 				break;
 			case KeyEvent.VK_DOWN:
+				keyDown = true;
+				direction = 0;
 				System.out.println("down");
-				if(((x == 50 || x == 60 || x == 280 || x == 290 ) && (y <= 510 && y >= 370))
-						|| ((x == -10 || x == 0 || x == 250 || x == 260 ) && (y <= 360 && y >= 220))
-						|| ((x == 20 || x == 30 || x == 170 || x == 180 ) && (y <= 210 && y >= 70))) {
+				if((((x >= 50 && x <= 60) || (x >= 280 && x <= 290 )) && (y <= 510 && y >= 370))
+						|| (((x >= -10 && x <= 0) || (x >= 250 && x <= 260 )) && (y <= 360 && y >= 220))
+						|| (((x >= 20 && x <= 30) || (x >= 170 && x <= 180 )) && (y <= 210 && y >= 70))) {
 					penz_p.setLocation(x, y+10);
 					System.out.println(penz_p.getLocation());
 				}
 				break;
 			case KeyEvent.VK_LEFT:
+				keyLeft = true;
+				direction = 1;
 				System.out.println("left");
 				if((x > -20) && (y == 70 || y == 220 || y == 370 || y == 520)) {
 					penz_p.setLocation(x-10, y);
@@ -187,17 +236,19 @@ public class MiniGameView extends JPanel{
 				}
 				break;
 			case KeyEvent.VK_RIGHT:
+				keyRight = true;
+				direction = 2;
 				System.out.println("right");
 				if((x < 300) && (y == 70 || y == 220 || y == 370 || y == 520)) {
 					penz_p.setLocation(x+10, y);
 					System.out.println(penz_p.getLocation());
 				}
 				break;
-			case KeyEvent.VK_ENTER:
-				System.out.println("enter");
-//				Jump jump = new Jump();
-//				Thread tp = new Thread(jump);
-//				tp.start();
+			case KeyEvent.VK_SPACE:
+				System.out.println("space");
+				Jump jump = new Jump();
+				Thread tp = new Thread(jump);
+				tp.start();
 			default:
 				break;
 			}
@@ -207,7 +258,20 @@ public class MiniGameView extends JPanel{
 
 		@Override
 		public void keyReleased(KeyEvent e) {
-			
+			switch(e.getKeyCode()){
+			case KeyEvent.VK_LEFT :
+			keyLeft = false;
+			break;
+			case KeyEvent.VK_RIGHT :
+			keyRight = false;
+			break;
+			case KeyEvent.VK_UP :
+			keyUp = false;
+			break;
+			case KeyEvent.VK_DOWN :
+			keyDown = false;
+			break;
+			}
 		}
 	}
 	
@@ -237,24 +301,40 @@ public class MiniGameView extends JPanel{
 	}
 	
 	
-//	class Jump extends Thread{
-//		int x = penz_p.getX();
-//		int y = penz_p.getY();
-//		
-//		@Override
-//		public void run() {
-//			while(true) {
-//				try {
-//					
-//					for(int i = 0; i < 20 )
-//						Thread.sleep(10);
-//				} catch (Exception e) {
-//					// TODO: handle exception
-//				}
-//			}
-//		}
-//		
-//	}
+	class Jump extends Thread{
+		int[] yarr = {-10, -8, -6, -4, 0, 0, 4, 6, 8, 10};
+		int[] x1arr = {-10, -8, -6, -4, 0, 0, -4, -6, -8, -10};
+		int[] x2arr = {10, 8, 6, 4, 0, 0, 4, 6, 8, 10};
+		int x = penz_p.getX();
+		int y = penz_p.getY();
+		Key key = new Key();
+		@Override
+		public void run() {
+			try {
+				if(direction == 1) {
+					for(int i = 0; i < 10; i++) {
+						y += yarr[i];
+						x += x1arr[i];
+						penz_p.setLocation(x, y);
+						Thread.sleep(10);
+					}
+				}
+				if(direction == 2) {
+					for(int i = 0; i < 10; i++) {
+						y += yarr[i];
+						x += x2arr[i];
+						penz_p.setLocation(x, y);
+						Thread.sleep(10);
+					}
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			
+		}
+		
+	}
 	
 	
 	class Monster1 extends Thread{
@@ -266,26 +346,30 @@ public class MiniGameView extends JPanel{
 			System.out.println(monster_p1.getX());
 			System.out.println(monster_p1.getY());
 			while(true) {
-				try {
-					
-					if(x == 0) {
-						for(int i = 0; i <= 290; i+=10) {
-							
-							x += 10;
-							monster_p1.setLocation(x, 370);
-							Thread.sleep(400);
+				if(hit()) {
+					//게임종료
+				}else {
+					try {
+						
+						if(x == 0) {
+							for(int i = 0; i <= 290; i+=10) {
+								
+								x += 10;
+								monster_p1.setLocation(x, 390);
+								Thread.sleep(400);
+							}
+							System.out.println("1");
+						} else if(x == 300) {
+							for(int i = 300; i >= 10; i-=10) {
+								
+								x -= 10;
+								monster_p1.setLocation(x, 390);
+								Thread.sleep(400);
+							}
+							System.out.println("2");
 						}
-						System.out.println("1");
-					} else if(x == 300) {
-						for(int i = 300; i >= 10; i-=10) {
-							
-							x -= 10;
-							monster_p1.setLocation(x, 370);
-							Thread.sleep(400);
-						}
-						System.out.println("2");
+					} catch (Exception e) {
 					}
-				} catch (Exception e) {
 				}
 			}
 		}
@@ -299,26 +383,30 @@ public class MiniGameView extends JPanel{
 			System.out.println(monster_p2.getX());
 			System.out.println(monster_p2.getY());
 			while(true) {
-				try {
-					
-					if(x == 0) {
-						for(int i = 0; i <= 290; i+=10) {
-							
-							x += 10;
-							monster_p2.setLocation(x, 210);
-							Thread.sleep(100);
+				if(hit()) {
+					//게임종료
+				} else {
+					try {
+						
+						if(x == 0) {
+							for(int i = 0; i <= 290; i+=10) {
+								
+								x += 10;
+								monster_p2.setLocation(x, 240);
+								Thread.sleep(100);
+							}
+							System.out.println("1");
+						} else if(x == 300) {
+							for(int i = 300; i >= 10; i-=10) {
+								
+								x -= 10;
+								monster_p2.setLocation(x, 240);
+								Thread.sleep(100);
+							}
+							System.out.println("2");
 						}
-						System.out.println("1");
-					} else if(x == 300) {
-						for(int i = 300; i >= 10; i-=10) {
-							
-							x -= 10;
-							monster_p2.setLocation(x, 210);
-							Thread.sleep(100);
-						}
-						System.out.println("2");
+					} catch (Exception e) {
 					}
-				} catch (Exception e) {
 				}
 			}
 		}
@@ -332,31 +420,36 @@ public class MiniGameView extends JPanel{
 			System.out.println(monster_p3.getX());
 			System.out.println(monster_p3.getY());
 			while(true) {
-				try {
-					
-					if(x == 0) {
-						for(int i = 0; i <= 290; i+=10) {
-							
-							x += 10;
-							monster_p3.setLocation(x, 60);
-							Thread.sleep(150);
+				if(hit()) {
+					//게임종료
+				} else {
+					try {
+						if(x == 0) {
+							for(int i = 0; i <= 290; i+=10) {
+								
+								x += 10;
+								monster_p3.setLocation(x, 90);
+								Thread.sleep(150);
+							}
+							System.out.println("1");
+						} else if(x == 300) {
+							for(int i = 300; i >= 10; i-=10) {
+								
+								x -= 10;
+								monster_p3.setLocation(x, 90);
+								Thread.sleep(150);
+							}
+							System.out.println("2");
 						}
-						System.out.println("1");
-					} else if(x == 300) {
-						for(int i = 300; i >= 10; i-=10) {
-							
-							x -= 10;
-							monster_p3.setLocation(x, 60);
-							Thread.sleep(150);
-						}
-						System.out.println("2");
+					} catch (Exception e) {
 					}
-				} catch (Exception e) {
 				}
 			}
 		}
 	}
-
+	
+	
+	
 
 
 }
