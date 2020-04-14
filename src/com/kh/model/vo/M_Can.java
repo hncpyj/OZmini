@@ -1,18 +1,13 @@
 package com.kh.model.vo;
 
-import java.awt.Image;
-import java.util.Random;
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-
-public class M_Bottle extends M_Garbage{
+public class M_Can extends M_Garbage{
 	
+
 	Image image;
 	JLabel label;
 	int random1 = new Random().nextInt(5)+1;
 
-	public M_Bottle(int x, int y) {
+	public M_Can(int x, int y) {
 		super(int x, int y);
 		image = new ImageIcon(""+ "png").getImage().getScaledInstance(40, 40, 0);
 		
