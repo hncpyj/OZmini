@@ -5,22 +5,19 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import com.kh.view.MainView;
+import com.kh.view.MiniGameView;
 
 public class M_Bottle extends M_Garbage{
 	
 	Image image;
 	JLabel label;
-	int random1 = new Random().nextInt(5)+1;
-
-	public M_Bottle(int x, int y) {
-		super(int x, int y);
+	
+	public M_Bottle() {
 		image = new ImageIcon(""+ "png").getImage().getScaledInstance(40, 40, 0);
-		
-		label = new JLabel(new ImageIcon(image));
-		if(random1 == 1) {
-			label.setBounds(x,y,40,40);
-		}
-		
+		label.setBounds(super.getGx(),super.getGy(), 20, 20);
 	}
 
 	public Image getImage() {
@@ -40,3 +37,4 @@ public class M_Bottle extends M_Garbage{
 	}
 
 }
+
