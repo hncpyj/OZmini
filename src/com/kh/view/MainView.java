@@ -15,9 +15,9 @@ public class MainView extends JFrame {
 		
 		
 		MiniGameView mgv = new MiniGameView(this, p);
-		Thread th = new Thread(mgv);
-		th.start();
-		this.addKeyListener(mgv);
+//		Thread th = new Thread(mgv);
+//		th.start();
+		
 		this.add(new MiniGameView(this, p));
 		
 		this.setVisible(true);
