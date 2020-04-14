@@ -58,10 +58,15 @@ public class M_Monster {
 		repaint();
 	}
 	
-	public void MoveX() {
+	public void MoveX() {//x좌표로 이동
 		x += move;
 		if(x == 100) {
 			x-= move;
 		}
+	}
+	
+	public void PP() {
+		//dead 죽었나 살았나
+		
 	}
 }
