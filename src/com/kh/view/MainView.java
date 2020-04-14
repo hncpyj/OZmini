@@ -15,8 +15,6 @@ public class MainView extends JFrame {
 		
 		
 		MiniGameView mgv = new MiniGameView(this, p);
-//		Thread th = new Thread(mgv);
-//		th.start();
 		
 		this.add(mgv);
 		
