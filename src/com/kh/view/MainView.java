@@ -18,7 +18,7 @@ public class MainView extends JFrame {
 //		Thread th = new Thread(mgv);
 //		th.start();
 		
-		this.add(new MiniGameView(this, p));
+		this.add(mgv);
 		
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
