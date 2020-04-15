@@ -4,14 +4,15 @@ package com.kh.view;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.*;
 
 import javax.swing.*;
 
 import com.kh.model.vo.*;
-//import com.kh.view.MiniGameView.Monster1;
-//import com.kh.view.MiniGameView.Monster2;
-//import com.kh.view.MiniGameView.Monster3;
+import com.kh.view.ChangePanel;
+import com.kh.view.HomeView;
 
 public class MiniGameView extends JPanel{
 	private MainView mf;
@@ -20,7 +21,7 @@ public class MiniGameView extends JPanel{
 	Player p;
 	
 	//상어랑 hit 판별 생성자
-	private boolean hit() {
+	public boolean hit() {
 		int x1 = penz_p.getX();
 		int y1 = penz_p.getY();
 		int xm1 = monster_p1.getX();
@@ -43,8 +44,6 @@ public class MiniGameView extends JPanel{
 	Image penzL = new ImageIcon("src/image/minigame/pengL.gif").getImage().getScaledInstance(80, 80, 0);
 	Image penzR = new ImageIcon("src/image/minigame/pengR.gif").getImage().getScaledInstance(80, 80, 0);
 	Image monster1 = new ImageIcon("src/image/minigame/angryshark.png").getImage().getScaledInstance(50, 60, 0);
-	Image monster2= new ImageIcon("src/image/minigame/angryshark.png").getImage().getScaledInstance(50, 60, 0);
-	Image monster3 = new ImageIcon("src/image/minigame/angryshark.png").getImage().getScaledInstance(50, 60, 0);
 	Image garbage1 = new ImageIcon("src/image/minigame/담배.png").getImage().getScaledInstance(50, 50, 0);
 	Image garbage2 = new ImageIcon("src/image/minigame/can1.png").getImage().getScaledInstance(50, 50, 0);
 	Image garbage3 = new ImageIcon("src/image/minigame/과자봉지.png").getImage().getScaledInstance(50, 50, 0);
@@ -59,6 +58,8 @@ public class MiniGameView extends JPanel{
 	JPanel garbage_p1 = new JPanel();
 	JPanel garbage_p2 = new JPanel();
 	JPanel garbage_p3 = new JPanel();
+	
+	JPanel gameOver_p = new JPanel();
 
 	//라벨(배경, 펭귄왼쪽, 펭귄오른쪽)
 	JLabel label;
@@ -73,6 +74,9 @@ public class MiniGameView extends JPanel{
 	JLabel garbage_l2;
 	JLabel garbage_l3;
 	
+	JLabel gameOver_l;
+	
+	JButton over_b;
 	
 	boolean keyUp = false;
 	boolean keyDown = false;
@@ -82,6 +86,8 @@ public class MiniGameView extends JPanel{
 	
 	int direction;
 	int count;
+	int countGarbege;
+	int countPearl;
 	
 	Thread th;
 	
@@ -93,17 +99,6 @@ public class MiniGameView extends JPanel{
 		
 		this.setLayout(null);
 		
-		Monster1 m1 = new Monster1();
-		Monster2 m2 = new Monster2();
-		Monster3 m3 = new Monster3();
-
-		Thread th1 = new Thread(m1);
-		Thread th2 = new Thread(m2);
-		Thread th3 = new Thread(m3);
-	
-		th1.start();
-		th2.start();
-		th3.start();
 		
 		//배경이미지
 		background = new ImageIcon("src/image/minigame/minigamebackground.png").getImage().getScaledInstance(360, 640, 0);
@@ -113,9 +108,9 @@ public class MiniGameView extends JPanel{
 		//상어 라벨
 		monster_l1 =  new JLabel(new ImageIcon(monster1));
 		monster_l1.setBounds(0, 0, 50, 60);
-		monster_l2 =  new JLabel(new ImageIcon(monster2));
+		monster_l2 =  new JLabel(new ImageIcon(monster1));
 		monster_l2.setBounds(0, 0, 50, 60);
-		monster_l3 =  new JLabel(new ImageIcon(monster3));
+		monster_l3 =  new JLabel(new ImageIcon(monster1));
 		monster_l3.setBounds(0, 0, 50, 60);
 		
 		//쓰레기 라벨
@@ -133,6 +128,11 @@ public class MiniGameView extends JPanel{
 		penz_r = new JLabel(new ImageIcon(penzR));
 		penz_r.setSize(80, 140);
 		penz_r.setLocation(0, 0);
+		
+		
+		over_b = new JButton(new ImageIcon(new ImageIcon("src/image/minigame/toxic-waste.png").getImage().getScaledInstance(98, 35, 0)));
+		over_b.setBounds(131, 530, 98, 35);
+		
 		
 		//방해물
 		JLabel obst1_1 = new JLabel(new ImageIcon(obst));
@@ -163,7 +163,6 @@ public class MiniGameView extends JPanel{
 		ladder3_2.setBounds(170, 160, 90, 160);
 		
 		
-		
 		//펭귄 패널에 위치 크기 조정
 		penz_p.add(penz_l);
 		penz_p.setOpaque(false);
@@ -171,10 +170,10 @@ public class MiniGameView extends JPanel{
 		penz_p.setSize(80, 140);
 		//상어 패널에 라벨 붙이고 위치 크기 조정
 		monster_p1.add(monster_l1);
-		monster_p1.setBounds(0, 370, 50, 60);
+		monster_p1.setBounds(0, 60, 50, 60);
 		monster_p1.setOpaque(false);
 		monster_p2.add(monster_l2);
-		monster_p2.setBounds(0, 370, 50, 60);
+		monster_p2.setBounds(0, 240, 50, 60);
 		monster_p2.setOpaque(false);
 		monster_p3.add(monster_l3);
 		monster_p3.setBounds(0, 370, 50, 60);
@@ -201,6 +200,11 @@ public class MiniGameView extends JPanel{
 			garbage_p2.setBounds(240, 370, 50, 50);
 			garbage_p3.setBounds(270, 520, 50, 50);
 		}
+		
+		if(hit()==true) {
+			this.add(over_b);
+			
+		}
 		this.add(garbage_p1);
 		this.add(garbage_p2);
 		this.add(garbage_p3);
@@ -212,6 +216,18 @@ public class MiniGameView extends JPanel{
 		this.add(monster_p1);
 		this.add(monster_p2);
 		this.add(monster_p3);
+		
+		Monster1 m1 = new Monster1();
+		Monster2 m2 = new Monster2();
+		Monster3 m3 = new Monster3();
+
+		Thread th1 = new Thread(m1);
+		Thread th2 = new Thread(m2);
+		Thread th3 = new Thread(m3);
+	
+		th1.start();
+		th2.start();
+		th3.start();
 		
 		this.add(obst1_1);
 		this.add(obst1_2);
@@ -231,13 +247,22 @@ public class MiniGameView extends JPanel{
 		
 		//키보드 입력
 		mf.addKeyListener(new Key());
+//		over_b.addMouseListener(new MyMouseAdapter());
 		//penz_l.setFocusable(true);
 		
 		mf.add(this);
 		mf.repaint();
 		
+		
 	}
 
+	public void end() {
+		if(hit() == true) {
+			System.out.println("!!!hit!!!");
+		}
+	}
+	
+	
 
 	class Key implements KeyListener{
 		
@@ -395,7 +420,12 @@ public class MiniGameView extends JPanel{
 					for(int i = 0; i < 10; i++) {
 						y += yarr[i];
 						x += x1arr[i];
-						penz_p.setLocation(x, y);
+						if(x<-20) {
+							x=-20;
+							penz_p.setLocation(x, y);
+						} else {
+							penz_p.setLocation(x, y);
+						}
 						Thread.sleep(10);
 					}
 				}
@@ -403,19 +433,23 @@ public class MiniGameView extends JPanel{
 					for(int i = 0; i < 10; i++) {
 						y += yarr[i];
 						x += x2arr[i];
-						penz_p.setLocation(x, y);
+						if(x>300) {
+							x=300;
+							penz_p.setLocation(x, y);
+						} else {
+							penz_p.setLocation(x, y);
+						}
 						Thread.sleep(10);
 					}
+
 				}
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 		}
 	}
-	
-	
-	class Monster1 extends Thread{
 		
+	class Monster1 extends Thread{
 		int x = monster_p1.getX();
 		int y = monster_p1.getY();
 		@Override
@@ -423,9 +457,18 @@ public class MiniGameView extends JPanel{
 			System.out.println(monster_p1.getX());
 			System.out.println(monster_p1.getY());
 			while(true) {
-				if(hit()) {
-					//게임종료
-				}else {
+				if(hit()==true) {
+					p.setGarbage(p.getGarbage() + countGarbege);
+					ChangePanel.changePanel(mf, miniGameView, new GemeOverView(mf, p, countGarbege));
+					try {
+						Thread.sleep(300);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+				
+				} else {
 					try {
 						
 						if(x == 0) {
@@ -459,8 +502,16 @@ public class MiniGameView extends JPanel{
 			System.out.println(monster_p2.getX());
 			System.out.println(monster_p2.getY());
 			while(true) {
-				if(hit()) {
-					//게임종료
+				if(hit()==true) {
+//					System.out.println("m2 hit");
+					p.setGarbage(p.getGarbage() + countGarbege);
+					ChangePanel.changePanel(mf, miniGameView, new GemeOverView(mf, p, countGarbege));
+					try {
+						Thread.sleep(300);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} else {
 					try {
 						
@@ -496,8 +547,16 @@ public class MiniGameView extends JPanel{
 			System.out.println(monster_p3.getX());
 			System.out.println(monster_p3.getY());
 			while(true) {
-				if(hit()) {
-					//게임종료
+				if(hit()==true) {
+//					System.out.println("m3 hit");
+					p.setGarbage(p.getGarbage() + countGarbege);
+					ChangePanel.changePanel(mf, miniGameView, new GemeOverView(mf, p, countGarbege));
+					try {
+						Thread.sleep(300);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				} else {
 					try {
 						if(x == 0) {
@@ -524,9 +583,13 @@ public class MiniGameView extends JPanel{
 		}
 	}
 	
+	class MyMouseAdapter extends MouseAdapter {
+		@Override
+		public void mousePressed(MouseEvent e) {
+//			ChangePanel.changePanel(mf, miniGameView, new HomeView(mf, p));
+		}
+	}
 	
-	
-
 
 }
 
